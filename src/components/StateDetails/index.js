@@ -60,62 +60,67 @@ class StateDetails extends Component{
           )
         return(
            
-                <div className="state-view">
-            <input
-                type="search"
-                onChange={this.onChangeSearchInput}
-                value={searchStateInput}
-            />
-            {sort === false ? (<button type="button" onClick={this.sortStates}>Sort By Confirmed Cases</button>):
-            (<button type="button" onClick={this.normallOrder}>Actually Order</button>)}
+            <div className="state-view">
+                <input
+                    type="search"
+                    onChange={this.onChangeSearchInput}
+                    value={searchStateInput}
+                    placeholder="Search by State Name"
+                    className="input-style"
+                />
+                {sort === false ? (<button type="button" onClick={this.sortStates} className='Sort-button'>Sort to Confirmed Cases</button>):
+                (<button type="button" onClick={this.normallOrder} className='Sort-button'>Actually Order</button>)}
             
-            <ul className="card-container">
-            {searchStateResults.map( (each,i)  => {
-               return( 
-                <Link to={`/district/${each.state}`} className='link-style'  key={i}>
-               <li className="list-container">
-                    <h1 className="state-heading">{each.state}</h1>
-                    <div className='card-inside-container'>
-                        <div className="card-top">
-                            <h1 className="text-content">Active Cases: {each.active}</h1>
-                            <h1 className="text-content">Confirmed Cases: {each.confirmed}</h1>
-                        </div>
-                        <div className="card-top">
-                            <h1 className="text-content">Death Cases: {each.deaths}</h1>
-                            <h1 className="text-content">Recovered Cases: {each.recovered}</h1>
-                        </div>
-                        <Popup 
-                            modal
-                            trigger={
-                               
-                                <button type="button" className="addEmp-button">
-                                    Share
-                                </button>                           
-                             }
-                        >
-                            {close => (
-                                <div>
-                                    <button
-                                    type="button"
-                                className="close-popup"
-                                onClick={() => close()}
-                                    >
-                                    Close
-                                    </button>
+                <ul className="card-container">
+                {searchStateResults.map( (each,i)  => {
+                return( 
+                    
+                <li className="list-container" key={i}>
+                        <h1 className="state-heading">{each.state}</h1>
+                        <div className='card-inside-container'>
+                            <div className="card-top">
+                                <h1 className="text-content">Active Cases: {each.active}</h1>
+                                <h1 className="text-content">Confirmed Cases: {each.confirmed}</h1>
+                            </div>
+                            <div className="card-top">
+                                <h1 className="text-content">Death Cases: {each.deaths}</h1>
+                                <h1 className="text-content">Recovered Cases: {each.recovered}</h1>
+                            </div>
+                            <div className="card-top">
+                            <Popup 
+                                modal
+                                trigger={
+                                
+                                    <button type="button" className="share-button">
+                                        Share
+                                    </button>                           
+                                }
+                            >
+                                {close => (
                                     <div>
-                                        <ShareGmail Sharedetails={each}/>
+                                        <button
+                                        type="button"
+                                    className="close-popup"
+                                    onClick={() => close()}
+                                        >
+                                        Close
+                                        </button>
+                                        <div>
+                                            <ShareGmail Sharedetails={each}/>
+                                        </div>
                                     </div>
-                                </div>
-                             )}
-                        </Popup>
-                    </div>
-                </li>
-                </Link>
-                )
-            })
+                                )}
+                            </Popup>
+                            <Link to={`/district/${each.state}`} className='link-style'  >View DistrictDetails</Link>
+                            </div>
+                        </div>
+                    </li>
+    
+                    )
+                })
 
-            }
-            </ul>
+                }
+                </ul>
            </div>
          
            

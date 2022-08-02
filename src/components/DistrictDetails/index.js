@@ -1,12 +1,13 @@
 import { Component } from "react";
-import Popup from 'reactjs-popup'
-import ShareGmail from "../ShareGmail";
-// import './index.css'
+// import Popup from 'reactjs-popup'
+// import ShareGmail from "../ShareGmail";
+import './index.css'
 import 'reactjs-popup/dist/index.css'
+import { Link } from "react-router-dom";
 class DistrictDetails extends Component{
         state = {
-            allDistrictDetails : {},
-            searchStateInput: '',
+            allDistrictDetails : [],
+            searchDistrictInput: '',
             sort: false
         }
 
@@ -19,26 +20,27 @@ class DistrictDetails extends Component{
         let response = await fetch(stateURL, options)
         let jsonData = await response.json()
         const statename = this.props.match.params.statename
-        console.log("jsondata", jsonData)
+        // console.log("jsondata", jsonData)
         let districtData = jsonData?.[statename]?.districtData	
-        console.log(districtData, "--------------")
+        // console.log(districtData, "--------------")
+        let districtDetailsArr =[]
+        if(districtData !== undefined){
+            districtDetailsArr = Object.entries(districtData)
+        }
         this.setState({
-            allDistrictDetails: districtData
+            allDistrictDetails: districtDetailsArr
         })
     }
 
     onChangeSearchInput = event => {
         this.setState({
-            searchStateInput: event.target.value
+            searchDistrictInput: event.target.value
         })
       }
 
-    sortStates = () =>{
+      sortDistricts = () =>{
         let {allDistrictDetails} = this.state
-        let allArray = Object.entries(allDistrictDetails);
-        let sortdata =  allArray.sort((a, b) => {
-            // console.log("a", a[1].confirmed)
-            // console.log("b", b[1].confirmed)
+        let sortdata =  allDistrictDetails.sort((a, b) => {
             return a[1].confirmed - b[1].confirmed;
            
         });
@@ -58,23 +60,6 @@ class DistrictDetails extends Component{
         }) 
     }
 
-    // districtDet = (statename, allDistrictDetails) =>{
-       
-        
-    //     // let b = a
-    //     console.log(statename)
-    //     console.log("alldistricts",typeof(allDistrictDetails), allDistrictDetails)
-    //     // console.log(x)
-    //     // console.log(Object.keys(a))
-    //     // console.log(b.districtData)
-    //     let lenObj = Object.keys(allDistrictDetails).length
-    //     if(lenObj !== 0){
-    //         console.log("hello")
-    //         let a = allDistrictDetails[statename]
-    //         console.log(a.districtData)
-    //     }
-        
-    // }
 
     componentDidMount(){
          console.log(this.props.match.params)
@@ -83,42 +68,38 @@ class DistrictDetails extends Component{
 
     render(){        
         const statename = this.props.match.params.statename
-        const {allDistrictDetails, searchStateInput, sort} = this.state
-        console.log("all",allDistrictDetails)
-        let asArray
-        let searchStateResults 
-        if (sort !== true){
-           asArray = Object.entries(allDistrictDetails);
-        // console.log("asRay", asArray)
-         searchStateResults = asArray.filter( each =>
-            each[0].toUpperCase().includes(searchStateInput.toUpperCase())
-        )
-        }else{
+        const {allDistrictDetails, searchDistrictInput, sort} = this.state
+        // console.log("all",allDistrictDetails)
+        let searchStateResults =[]
+        if(allDistrictDetails.length !== 0){
+
             searchStateResults = allDistrictDetails.filter( each =>
-                each[0].toUpperCase().includes(searchStateInput.toUpperCase())
+                each[0].toUpperCase().includes(searchDistrictInput.toUpperCase())
             )
         }
-        
-        
-        // console.log(asArray)
-        // console.log(districtName)
-        console.log("searchresult",searchStateResults)
+        // console.log("searchresult",searchStateResults)
         
         return(
             
            <div className="state-view">
-            <h1>State: {statename}</h1>
-            <input
-                type="search"
-                onChange={this.onChangeSearchInput}
-                value={searchStateInput}
-            />
-            {sort === false ? (<button type="button" onClick={this.sortStates}>Sort By Confirmed Cases</button>):
-            (<button type="button" onClick={this.normallOrder}>Actually Order</button>)}
+            {allDistrictDetails.length !== 0 ? (
+            <>
+                <div className="district-top">
+                    <h1 className="state-name">State: {statename}</h1>
+                    <Link to={"/"} className="back-to-state Sort-button">Back to State</Link>
+                </div>
+                <input
+                    type="search"
+                    onChange={this.onChangeSearchInput}
+                    value={searchDistrictInput}
+                    placeholder="Search by District Name"
+                    className="input-style"
+                />
+                {sort === false ? 
+                (<button type="button" onClick={this.sortDistricts} className='Sort-button'>Sort By Confirmed Cases</button>):
+                (<button type="button" onClick={this.normallOrder} className='Sort-button'>Actually Order</button>)}
             
             <ul className="card-container">
-            {searchStateResults && 
-            <>
             {searchStateResults.map( (each,i)  => {
                return( 
                <li key={i} className="list-container">
@@ -160,9 +141,8 @@ class DistrictDetails extends Component{
                 </li>)
             })
             }
-            </>
-            }
             </ul>
+            </>):(<h1>No Data Related to {statename}</h1>)}
            </div>
         )
     }
