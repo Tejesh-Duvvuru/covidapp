@@ -1,0 +1,40 @@
+.card-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.list-container{
+    background-color: white;
+    margin-bottom: 8px;
+    padding: 20px;
+    border-radius: 8px;
+    width: 20vw;
+    list-style: none;
+    margin-right: 10px;
+    box-shadow: 2px 2px 2px 2px  lightblue;
+    
+}
+.card-inside-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.card-top{
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-container:hover{
+    box-shadow: 2px 2px 2px 2px  rgb(230, 129, 27);
+}
+
+
+.text-content{
+    font-size: 80%;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.state-heading{
+    font-size: 100%;
+    text-align: center;
+}
+
