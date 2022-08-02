@@ -3,6 +3,7 @@ import Popup from 'reactjs-popup'
 import ShareGmail from "../ShareGmail";
 import './index.css'
 import 'reactjs-popup/dist/index.css'
+import {Link} from 'react-router-dom'
 class StateDetails extends Component{
         state = {
             stateDetails : [],
@@ -58,7 +59,8 @@ class StateDetails extends Component{
             each.state.toUpperCase().includes(searchStateInput.toUpperCase())
           )
         return(
-           <div className="state-view">
+           
+                <div className="state-view">
             <input
                 type="search"
                 onChange={this.onChangeSearchInput}
@@ -70,7 +72,8 @@ class StateDetails extends Component{
             <ul className="card-container">
             {searchStateResults.map( (each,i)  => {
                return( 
-               <li key={i} className="list-container">
+                <Link to={`/district/${each.state}`} className='link-style'  key={i}>
+               <li className="list-container">
                     <h1 className="state-heading">{each.state}</h1>
                     <div className='card-inside-container'>
                         <div className="card-top">
@@ -106,12 +109,16 @@ class StateDetails extends Component{
                              )}
                         </Popup>
                     </div>
-                </li>)
+                </li>
+                </Link>
+                )
             })
 
             }
             </ul>
            </div>
+         
+           
         )
     }
 }
