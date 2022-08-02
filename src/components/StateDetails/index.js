@@ -100,7 +100,7 @@ class StateDetails extends Component{
                                     Close
                                     </button>
                                     <div>
-                                        <ShareGmail/>
+                                        <ShareGmail Sharedetails={each}/>
                                     </div>
                                 </div>
                              )}
