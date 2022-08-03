@@ -115,7 +115,7 @@ class StateDetails extends Component{
                                     </div>
                                 )}
                             </Popup>
-                            {each.state !== "Total" && <Link to={`/district/${each.state}`} className='link-style'  >View DistrictDetails</Link>}
+                            {each.state === "Total" || each.state === "State Unassigned" ? (null):(<Link to={`/district/${each.state}`} className='link-style'  >View DistrictDetails</Link>)}
                             </div>
                         </div>
                     </li>
