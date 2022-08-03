@@ -4,11 +4,13 @@ import ShareGmail from "../ShareGmail";
 import './index.css'
 import 'reactjs-popup/dist/index.css'
 import {Link} from 'react-router-dom'
+import { TiDelete } from 'react-icons/ti';
 class StateDetails extends Component{
         state = {
             stateDetails : [],
             searchStateInput: '',
-            sort: false
+            sort: false,
+            onsearchState: false,
         }
 
     getStateWiseDetails = async () =>{
@@ -26,7 +28,9 @@ class StateDetails extends Component{
 
     onChangeSearchInput = event => {
         this.setState({
-            searchStateInput: event.target.value
+            onsearchState: true,
+            searchStateInput: event.target.value,
+            
         })
       }
 
@@ -54,10 +58,11 @@ class StateDetails extends Component{
     }
 
     render(){
-        const {stateDetails, searchStateInput, sort} = this.state
+        const {stateDetails, searchStateInput, sort, onsearchState} = this.state
         const searchStateResults = stateDetails.filter( each =>
             each.state.toUpperCase().includes(searchStateInput.toUpperCase())
           )
+        console.log(searchStateResults)
         return(
            
             <div className="state-view">
@@ -70,11 +75,10 @@ class StateDetails extends Component{
                 />
                 {sort === false ? (<button type="button" onClick={this.sortStates} className='Sort-button'>Sort to Confirmed Cases</button>):
                 (<button type="button" onClick={this.normallOrder} className='Sort-button'>Actually Order</button>)}
-            
+                <Link to={'/mapview'} className='link-style-map'>Map View</Link>
                 <ul className="card-container">
                 {searchStateResults.map( (each,i)  => {
-                return( 
-                    
+                return(     
                 <li className="list-container" key={i}>
                         <h1 className="state-heading">{each.state}</h1>
                         <div className='card-inside-container'>
@@ -103,15 +107,15 @@ class StateDetails extends Component{
                                     className="close-popup"
                                     onClick={() => close()}
                                         >
-                                        Close
+                                        <TiDelete/>
                                         </button>
                                         <div>
-                                            <ShareGmail Sharedetails={each}/>
+                                            <ShareGmail Sharedetails={each} area='state'/>
                                         </div>
                                     </div>
                                 )}
                             </Popup>
-                            <Link to={`/district/${each.state}`} className='link-style'  >View DistrictDetails</Link>
+                            {each.state !== "Total" && <Link to={`/district/${each.state}`} className='link-style'  >View DistrictDetails</Link>}
                             </div>
                         </div>
                     </li>
@@ -121,6 +125,7 @@ class StateDetails extends Component{
 
                 }
                 </ul>
+                {onsearchState === true && searchStateResults.length === 0 && <h1>No Data Found</h1>}
            </div>
          
            

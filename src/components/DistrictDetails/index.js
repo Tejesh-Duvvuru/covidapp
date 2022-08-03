@@ -1,14 +1,16 @@
 import { Component } from "react";
-// import Popup from 'reactjs-popup'
-// import ShareGmail from "../ShareGmail";
+import Popup from 'reactjs-popup'
+import ShareGmail from "../ShareGmail";
 import './index.css'
 import 'reactjs-popup/dist/index.css'
 import { Link } from "react-router-dom";
+import { TiDelete } from 'react-icons/ti';
 class DistrictDetails extends Component{
         state = {
             allDistrictDetails : [],
             searchDistrictInput: '',
-            sort: false
+            sort: false,
+            onsearchDistrict: false,
         }
 
         getDistrictWiseDetails = async () =>{
@@ -20,9 +22,7 @@ class DistrictDetails extends Component{
         let response = await fetch(stateURL, options)
         let jsonData = await response.json()
         const statename = this.props.match.params.statename
-        // console.log("jsondata", jsonData)
         let districtData = jsonData?.[statename]?.districtData	
-        // console.log(districtData, "--------------")
         let districtDetailsArr =[]
         if(districtData !== undefined){
             districtDetailsArr = Object.entries(districtData)
@@ -34,7 +34,8 @@ class DistrictDetails extends Component{
 
     onChangeSearchInput = event => {
         this.setState({
-            searchDistrictInput: event.target.value
+            searchDistrictInput: event.target.value,
+            onsearchDistrict: true
         })
       }
 
@@ -68,17 +69,14 @@ class DistrictDetails extends Component{
 
     render(){        
         const statename = this.props.match.params.statename
-        const {allDistrictDetails, searchDistrictInput, sort} = this.state
-        // console.log("all",allDistrictDetails)
-        let searchStateResults =[]
+        const {allDistrictDetails, searchDistrictInput, sort, onsearchDistrict} = this.state
+        let searchDistrictResults =[]
         if(allDistrictDetails.length !== 0){
 
-            searchStateResults = allDistrictDetails.filter( each =>
+            searchDistrictResults = allDistrictDetails.filter( each =>
                 each[0].toUpperCase().includes(searchDistrictInput.toUpperCase())
             )
         }
-        // console.log("searchresult",searchStateResults)
-        
         return(
             
            <div className="state-view">
@@ -100,7 +98,7 @@ class DistrictDetails extends Component{
                 (<button type="button" onClick={this.normallOrder} className='Sort-button'>Actually Order</button>)}
             
             <ul className="card-container">
-            {searchStateResults.map( (each,i)  => {
+            {searchDistrictResults.map( (each,i)  => {
                return( 
                <li key={i} className="list-container">
                     <h1 className="state-heading">{each[0]}</h1>
@@ -113,7 +111,7 @@ class DistrictDetails extends Component{
                             <h1 className="text-content">Death Cases: {each[1].deceased}</h1>
                             <h1 className="text-content">Recovered Cases: {each[1].recovered}</h1>
                         </div>
-                        {/* <Popup 
+                        <Popup 
                             modal
                             trigger={
                                
@@ -129,20 +127,21 @@ class DistrictDetails extends Component{
                                 className="close-popup"
                                 onClick={() => close()}
                                     >
-                                    Close
+                                    <TiDelete/>
                                     </button>
                                     <div>
-                                        <ShareGmail Sharedetails={each}/>
+                                        <ShareGmail Sharedetails={each} area ='district' stateName = {statename}/>
                                     </div>
                                 </div>
                              )}
-                        </Popup> */}
+                        </Popup>
                     </div>
                 </li>)
             })
             }
             </ul>
-            </>):(<h1>No Data Related to {statename}</h1>)}
+            {onsearchDistrict === true && searchDistrictResults.length === 0 && <h1>No Data Found</h1>}
+            </>):(null)}
            </div>
         )
     }

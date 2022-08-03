@@ -1,5 +1,4 @@
 import React from 'react'
-
 import DatamapsIndia from 'react-datamaps-india'
 
 const CovidDataIndianMap = () => {
@@ -41,7 +40,7 @@ const CovidDataIndianMap = () => {
     covidDetails()
     
   return (
-    <div className='indian-container'>
+    <div>
         <h1>Covid Report State Wise</h1>
         <DatamapsIndia style={{backgroundColor:'blue'}}
       regionData={obj}

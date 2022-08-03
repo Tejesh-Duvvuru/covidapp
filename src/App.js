@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header/>
+      <Header/>
         <Switch>
         <Route exact path='/' component={StateDetails} />
         <Route exact path='/district/:statename' component={DistrictDetails} />
