@@ -16,3 +16,7 @@
     color: rgba(215, 13, 13, 0.822);
     margin-right: 2%;
 }
+.header-right{
+    display: flex;
+    justify-content: space-between;
+}
