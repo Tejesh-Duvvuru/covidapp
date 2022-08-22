@@ -67,7 +67,8 @@ class DistrictDetails extends Component{
          this.getDistrictWiseDetails() 
     }
 
-    render(){        
+    render(){  
+        console.log("props in district", this.props)      
         const statename = this.props.match.params.statename
         const {allDistrictDetails, searchDistrictInput, sort, onsearchDistrict} = this.state
         let searchDistrictResults =[]
@@ -141,7 +142,7 @@ class DistrictDetails extends Component{
             }
             </ul>
             {onsearchDistrict === true && searchDistrictResults.length === 0 && <h1>No Data Found</h1>}
-            </>):(null)}
+            </>):(<h1>Loading...</h1>)}
            </div>
         )
     }
